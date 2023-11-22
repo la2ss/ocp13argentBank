@@ -1,10 +1,11 @@
 import './style/index.scss';
+import Header from './components/Header/Header';
 
 function App() {
   return (
     <div className="App">
 
-      test mise en place projet
+<Header />
     </div>
   );
 }
