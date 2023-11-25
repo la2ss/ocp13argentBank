@@ -16,7 +16,7 @@ export default function Header() {
 
       <div>
       <Link to='/login' className="main-nav-item" >
-          <i className="fa fa-user-circle"></i>
+          <i className="fa fa-user-circle nav-signin-icon"></i>
           Sign In
         </Link>   
       </div>

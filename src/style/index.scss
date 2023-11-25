@@ -291,4 +291,20 @@ html {
     .login-main {
       padding: 50px 0 !important;
     }
+    .error {
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    
+        h2 {
+          color: red;
+          font-size: 96px;
+        }
+        p {
+          font-size: 24px;
+        }
+      }
+    }
   }
