@@ -22,7 +22,6 @@ const Connection = async (username, password) => {
 }
 
 const GetUser = async () => {
-  //const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
@@ -50,4 +49,21 @@ const GetUser = async () => {
 
   return { error, isLoading };
 };
-export { Connection, GetUser };
+const EditUserData = async (firstName, lastName) => {
+  const response = await axios.put(
+    "http://localhost:3001/api/v1/user/profile",
+    { firstName: firstName, lastName: lastName },
+
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        "Content-Type": "application/json;charset=utf-8",
+      },
+    },
+  );
+  return response.data.body;
+};
+
+
+
+export { Connection, GetUser, EditUserData };

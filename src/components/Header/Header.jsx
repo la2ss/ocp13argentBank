@@ -19,7 +19,7 @@ export default function Header() {
   const navigate = useNavigate()
   const handelLogout =()=>{
     dispatch(logout(token))
-    navigate('/login')
+    navigate('/')
   }
   return (
     <nav className="main-nav">

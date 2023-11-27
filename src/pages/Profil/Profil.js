@@ -1,17 +1,7 @@
 import React from "react";
-import { GetUser } from "../../Redux/Api";
 import Welcome from "../../components/Welcome";
 
 export default function Profil() {
-  async function user() {
-    const getdata = await GetUser();
-    const firstName = getdata.firstName;
-    console.log(getdata)
-    return {firstName}
-  }
-  const data = user()
-  const first = data.firstName
-  console.log(first)
 
   return (
     <main className="main bg-dark">
