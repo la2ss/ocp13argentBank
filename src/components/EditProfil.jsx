@@ -1,9 +1,9 @@
 import React , {useState} from "react";
 import { useDispatch } from "react-redux";
-import { editUser, selectUser } from "../Redux/reducers/userReducer";
+import { editUser, setUser } from "../Redux/reducers/userReducer";
 import { EditUserData,GetUser } from "../Redux/Api";
 
-export default function EditProfil(user){
+export default function EditProfil({user}){
   const dispatch =useDispatch();
   const [lastName , setLast] = useState("");
   const [firstName , setFirst] = useState("");
@@ -15,13 +15,14 @@ export default function EditProfil(user){
     dispatch (editUser(false));
 
   }
-  console.log(firstName,lastName)
+  
 
   const SubmitEditData = (e)=>{
     e.preventDefault();
     EditUserData(firstName,lastName)
-    dispatch(selectUser)
-    dispatch(editUser(false))
+    .then(res => dispatch(setUser(res)))
+    .catch(error => console.log(error))
+    .finally(() => dispatch(editUser(false)))
   }
   return (
 <>
@@ -42,7 +43,7 @@ export default function EditProfil(user){
 
           </form>
         </h1>
-      )};
+      )}
     </>
   );
 }

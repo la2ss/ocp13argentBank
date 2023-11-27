@@ -60,7 +60,7 @@ const EditUserData = async (firstName, lastName) => {
         "Content-Type": "application/json;charset=utf-8",
       },
     },
-  );
+  )
   return response.data.body;
 };
 

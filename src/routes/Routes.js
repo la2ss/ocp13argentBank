@@ -17,13 +17,9 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={
-          <PrivateRoute>
-            <Profil />
-          </PrivateRoute>
-        }
-        />
-        <Route path="/profil" element={<Profil />} />
+        <Route element={<PrivateRoute />}>
+          <Route path='/profil' element={<Profil />} />
+        </Route>
         <Route path="/*" element={<Error />} />
       </Routes>
       <Footer />
