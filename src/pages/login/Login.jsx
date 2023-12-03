@@ -13,10 +13,44 @@ export default function Login(){
   const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useDispatch();
 
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
+  const fields = document.querySelectorAll('input[type= "email"], input[type ="password"]')
+  const errorFields = document.querySelectorAll('.error')
+  const errorDiv = document.createElement("div");   
+  errorDiv.classList.add('error'); 
+
+  function validateField(field){
+    if (field.checkValidity()){
+      return true;   
+    } else {
+
+      let message = field.validationMessage;
+      let showMessage = document.createElement("div");
+      showMessage.textContent = message;
+      showMessage.classList.add("error");
+      field.parentNode.appendChild(showMessage);    
+      return false;
+
+    }
+  }
+
+  function removeMsg(field){
+    let msg = document.querySelectorAll(".error");
+    msg.forEach((message) =>{
+      if(message.parentNode === field.parentNode){
+        field.parentNode.removeChild(message);
+      }
+    });
+  }
+
+  fields.forEach((field) =>{
+    field.addEventListener('input',(e)=>{ removeMsg(field);validateField(field);});
+  });
 
   const handledSubmit = (e) => {
     e.preventDefault()
+    const form = document.querySelector(".sign-in-content");
+    errorFields.forEach(el=>el.parentElement === form ? el.remove():null) 
 
     Connection(email, password)
     .then((token) => {
@@ -28,8 +62,9 @@ export default function Login(){
 
     })
     .catch((error) => {
-
-      console.log("Erreur d'identification", error);
+      form.prepend(errorDiv);
+     
+      errorDiv.innerHTML = error.message;
     })
 
   }
@@ -38,12 +73,13 @@ export default function Login(){
   <section className="sign-in-content" >
 
         <h1>Sign In</h1>
-        <form onSubmit={(e) => handledSubmit(e)}>
+        <form onSubmit={(e) => handledSubmit(e)} noValidate >
           <div className="input-wrapper">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
+              required
               defaultValue={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -53,6 +89,8 @@ export default function Login(){
             <input
               type="password"
               id="password"
+              minLength={6}
+              required
               defaultValue={password}
               onChange={(e) => setPassword(e.target.value)}
             />

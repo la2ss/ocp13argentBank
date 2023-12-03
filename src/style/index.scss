@@ -17,6 +17,9 @@ html {
     flex-direction: column;
     min-height: 100vh;
   }
+  main {
+    flex: 1;
+  }
   
   .main {
     flex: 1;
@@ -24,7 +27,8 @@ html {
   }
   
   .bg-dark {
-    background-color: #12002b;
+    // background-color: #12002b;
+    background-color: #e0e6ed;
   }
   
   .sr-only {
@@ -178,8 +182,8 @@ html {
     font-size: 1.1rem;
     font-weight: bold;
     margin-top: 1rem;
-    border-color: #00bc77;
-    background-color: #00bc77;
+    border-color: #6458f5 ;
+    background-color: #6458f5 ;
     color: #fff;
   }
   
@@ -270,15 +274,15 @@ html {
   }
   
   .edit-button {
-    border-color: #00bc77;
-    background-color: #00bc77;
+    border-color: #6458f5 ;
+    background-color: #6458f5 ;
     color: #fff;
     font-weight: bold;
     padding: 10px;
   }
   
   .header {
-    color: #fff;
+    color: #3c4b57;
     margin-bottom: 2rem;
   }
   
@@ -289,8 +293,8 @@ html {
     font-size: 1.1rem;
     font-weight: bold;
     margin-top: 1rem;
-    border-color: #00bc77;
-    background-color: #00bc77;
+    border-color: #6458f5;
+    background-color: #6458f5;
     color: #fff;
   }
   
@@ -362,4 +366,9 @@ html {
         font-weight: bold;
       }
     }
+  }
+  .error {
+    color: 'black';
+    font-weight: 600;
+    margin-bottom: 10px;
   }
