@@ -15,9 +15,10 @@ export default function Welcome () {
   const editNameFunction =(e)=>{
    
     e.preventDefault();
-    dispatch (editUser(true));
 
+    dispatch (editUser(true));
   }
+
   return (
     <>
       {isLoading ? (

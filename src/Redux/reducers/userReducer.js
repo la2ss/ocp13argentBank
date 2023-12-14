@@ -10,6 +10,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    // Je crée un reducer qui va stocker les informations de l'utilisateur
+		setUserInfos: (state, action) => {
+			state.firstName = action.payload.firstName
+			state.lastName = action.payload.lastName
+		},
     login: (state, action) => {
 
       state.token = action.payload;

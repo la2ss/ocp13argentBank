@@ -1,9 +1,7 @@
 swagger: "2.0"
 info:
-  title: Bank Argent API documentation
-  description: Contains all available API endpoints in this codebase
+  title: Transactions API
   version: 1.0.0
-  termsOfService: http://swagger.io/terms/
 host: localhost:3001
 basePath: /api/v1
 schemes:
@@ -110,10 +108,8 @@ paths:
           description: Invalid Fields
         "500":
           description: Internal Server Error
-  /transactions/currentMonth/byAccount:
+  /transactions/:
     get:
-      security:
-        - Bearer: []
       tags:
         - Transaction Module
       summary: Transaction API
@@ -121,236 +117,203 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: Attach Bearer JWT token
+          description: '"Bearer [JWT]'
           required: true
-      produces:
-        - application/jsony
-      responses:
-        "200":
-          description: Transactions retrieved successfully
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/TransactionsByAccount"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server Error
-  /transaction:
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Transaction API
-      description: API for create a transaction
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-        - in: body
-          name: body
-          description: Payload transaction
+
+        - in: query
+          name: userAccountId
+          description: user id
           required: true
           schema:
-            $ref: "#/definitions/Transaction"
+            $ref: "#/definitions/Transactions"
       produces:
         - application/json
       responses:
         "200":
-          description: User profile retrieved successfully
+          description: OK
           schema:
-            $ref: "#/definitions/TransactionResponse"
+            $ref: "#/definitions/TransactionsResponse"
+
         "400":
-          description: Invalid Fields
+          description: Bad request
+        "401":
+          description: Unauthenticated
+        "403":
+          description: Unauthorized
+        "404":
+          description: Not found
+
         "500":
           description: Internal Server Error
-  /transaction/{id}:
+
+  /transaction{Id}/:
     get:
-      security:
-        - Bearer: []
       tags:
         - Transaction Module
       summary: Transaction API
       description: API for receiving a transaction
       parameters:
         - in: header
+          type: string
           name: Authorization
-          description: Attach Bearer JWT token
+          description: '"Bearer [JWT]'
           required: true
-        - in: path
-          name: id
-          description: Transaction id
+
+        - in: query
+          name: userAccountId
+          description: user id
           required: true
           schema:
-            type: integer
+            $ref: "#/definitions/TransactionsId"
+        - in: query
+          name: transactionId
+          description: transaction id
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionsId"
       produces:
         - application/json
       responses:
         "200":
-          description: transaction retrieved successfully
+          description: OK
           schema:
-            $ref: "#/definitions/Transaction"
+            $ref: "#/definitions/TransactionIdResponse"
+
         "400":
-          description: Invalid Fields
+          description: Bad request
+        "401":
+          description: Unauthenticated
+        "403":
+          description: Unauthorized
+        "404":
+          description: Not found
+
         "500":
           description: Internal Server Error
+
     put:
-      security:
-        - Bearer: []
       tags:
         - Transaction Module
       summary: Transaction API
       description: API for updating a transaction
       parameters:
         - in: header
+          type: string
           name: Authorization
-          description: Attach Bearer JWT token
+          description: '"Bearer [JWT]'
           required: true
-        - in: path
-          name: id
+
         - in: body
-          name: body
-          description: Update transaction attributes
+          name: Body of the request
+          description: Changes the notes and/or the category of the transaction
           required: true
           schema:
-            $ref: "#/definitions/Transaction"
+            $ref: "#/definitions/TransactionsPut"
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction retrieved successfully
+          description: OK
           schema:
-            $ref: "#/definitions/TransactionResponse"
-        "400":
-          description: Invalid Fields
-        "500":
-          description: Internal Server Error
-    delete:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Transaction API
-      description: API for delete a transaction
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-        - in: path
-          name: id
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: Transaction remove successully
+            $ref: "#/definitions/TransactionsOtherResponse"
 
         "400":
-          description: Invalid Fields
+          description: Bad request
+        "401":
+          description: Unauthenticated
+        "403":
+          description: Unauthorized
+        "404":
+          description: Not found
+
         "500":
           description: Internal Server Error
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+
 definitions:
-  User:
+  # All transactions request payload
+  Transactions:
     properties:
-      email:
+      userAccountId:
         type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-      firstName:
-        type: string
-        description: user first name
-      lastName:
-        type: string
-        description: user last name
-  Login:
+        description: ID of the account
+
+  # Transaction details by id
+  TransactionId:
     properties:
-      email:
+      userAccountId:
         type: string
-        description: user email
-      password:
+        description: ID of the account
+      transactionId:
         type: string
-        description: user password
-  Transaction:
+        description: ID of the account
+
+    # retrieve transactions Api without Notes & Category
+  TransactionIdResponse:
+    type: object
     properties:
+      transactionId:
+        type: string
+        description: ID of a transaction
       date:
         type: string
-        description: date transaction
-      desciptionTransaction:
+        description: Date of the transaction
+      description:
         type: string
-        description: transaction details
+        description: Description of the transaction
       amount:
         type: string
-        description: transaction amount
+        description: Amount spent in the transaction
       balance:
         type: string
-        description: transaction balance
-      type:
-        type: string
-        description: transaction type
+        description: Account's balance after the transaction
       category:
         type: string
-        description: transaction category
-      note:
+        description: Category of the transaction
+      notes:
         type: string
-        description: transaction balance
+        description: User notes of the transaction
 
-  ApiResponse:
-    type: object
+  # Message succes delete transacation by transactionid && userAccountId
+  TransactionsMessageSuccess:
     properties:
-      status:
-        type: integer
       message:
         type: string
-      body:
-        type: object
-        properties:
-          id:
-            type: string
-          email:
-            type: string
-  LoginResponse:
-    type: object
+        description: Message of success
+
+  TransactionsResponse:
+    type: array
+    items:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: ID of a transaction
+        date:
+          type: string
+          description: Date of the transaction
+        description:
+          type: string
+          description: Description of the transaction
+        amount:
+          type: string
+          description: Amount spent in the transaction
+        balance:
+          type: string
+          description: Account's balance after the transaction
+
+  # Transaction Modify
+  TransactionsPut:
     properties:
-      token:
+      notes:
         type: string
-  UserProfile:
-    type: object
+        description: Notes of the transaction
+      category:
+        type: string
+        description: Category of the transaction
+
+  # Response success Crud transaction Notes & category
+  TransactionsOtherResponse:
     properties:
-      firstName:
-        type: string
-      lastName:
-        type: string
-  TransactionResponse:
-    type: object
-    properties:
-      status:
-        type: integer
       message:
         type: string
-      body:
-        type: object
-        properties:
-          id:
-            type: string
-
-  TransactionsByAccount:
-    type: object
-    properties:
-      account:
-        type: object
-        properties:
-          id:
-            type: string
-      transactions:
-        type: array
-        items:
-          $ref: "#/definitions/Transaction"
+        description: Message of success

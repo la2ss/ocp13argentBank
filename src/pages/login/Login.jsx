@@ -57,8 +57,7 @@ export default function Login(){
       localStorage.setItem("token", token);
       dispatch(login(token));
       console.log("success");
-      navigate("/profil")
-
+      navigate("/profile")
 
     })
     .catch((error) => {

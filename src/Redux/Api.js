@@ -18,6 +18,7 @@ const Connection = async (username, password) => {
       },
     },
   );
+
   return response.data.body.token;
 }
 
@@ -44,7 +45,7 @@ const GetUser = async () => {
         setError(error);
       })
       .finally(() => setIsLoading(false));
-
+      
   }, [dispatch]);
 
   return { error, isLoading };
@@ -61,6 +62,7 @@ const EditUserData = async (firstName, lastName) => {
       },
     },
   )
+
   return response.data.body;
 };
 

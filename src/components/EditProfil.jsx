@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { editUser, setUser } from "../Redux/reducers/userReducer";
 import { EditUserData,GetUser } from "../Redux/Api";
 
+
 export default function EditProfil({user}){
   const dispatch =useDispatch();
   const [lastName , setLast] = useState("");
@@ -11,18 +12,25 @@ export default function EditProfil({user}){
   error && <span>il y a une erreur</span>
 
   const CancelFunction =()=>{
- 
+
     dispatch (editUser(false));
 
   }
-  
 
   const SubmitEditData = (e)=>{
     e.preventDefault();
-    EditUserData(firstName,lastName)
+    
+// Reprend la valeur precedente si la valeur est vide
+const finalLastName = lastName.trim() === "" ? user.lastName : lastName;
+
+const finalFirstName =
+  firstName.trim() === "" ? user.firstName : firstName;
+
+    EditUserData(finalFirstName, finalLastName)
     .then(res => dispatch(setUser(res)))
     .catch(error => console.log(error))
     .finally(() => dispatch(editUser(false)))
+  
   }
   return (
 <>

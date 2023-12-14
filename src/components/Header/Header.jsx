@@ -16,7 +16,7 @@ export default function Header() {
   const navigate = useNavigate()
   const handelLogout =()=>{
     dispatch(logout(token))
-    navigate('/login')
+    navigate('/')
   }
   return (
     <nav className="main-nav">
@@ -34,7 +34,7 @@ export default function Header() {
           {isLoading ? (
             <span> chargement !!</span> 
           ):(
-            <Link to="/profil" className="main-nav-item name flex">
+            <Link to="/profile" className="main-nav-item name flex">
             
                 {user.firstName}
             </Link>
