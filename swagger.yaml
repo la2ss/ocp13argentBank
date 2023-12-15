@@ -110,182 +110,146 @@ paths:
           description: Internal Server Error
   /transactions/:
     get:
+      security:
+      - Bearer: []
       tags:
         - Transaction Module
-      summary: Transaction API
-      description: API for receiving all transactions
+      summary: List Transactions 
+      description: List all transactions of the month grouped by account
       parameters:
         - in: header
           name: Authorization
-          description: '"Bearer [JWT]'
-          required: true
-
-        - in: query
-          name: userAccountId
-          description: user id
+          description: "\"Bearer [JWT]"
           required: true
           schema:
-            $ref: "#/definitions/Transactions"
+            $ref: '#/definitions/Transactions'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: OK
           schema:
-            $ref: "#/definitions/TransactionsResponse"
-
-        "400":
+            $ref: '#/definitions/TransactionsResponse'
+      
+        '400':
           description: Bad request
-        "401":
-          description: Unauthenticated
-        "403":
-          description: Unauthorized
-        "404":
-          description: Not found
+        '401':
+           description: Unauthenticated
+        '403':
+           description: Unauthorized
+        '404':
+           description: Not found
 
-        "500":
+        '500':
           description: Internal Server Error
 
   /transaction{Id}/:
     get:
+      security:
+        - Bearer: []
       tags:
         - Transaction Module
-      summary: Transaction API
-      description: API for receiving a transaction
+      summary: Read Transaction
+      description: list to retrieve a particular transaction
       parameters:
         - in: header
-          type: string
+          type:  string
           name: Authorization
-          description: '"Bearer [JWT]'
+          description: "\"Bearer [JWT]"
           required: true
 
-        - in: query
-          name: userAccountId
-          description: user id
-          required: true
           schema:
-            $ref: "#/definitions/TransactionsId"
+            $ref: '#/definitions/TransactionsId'
         - in: query
-          name: transactionId
+          name: Id
           description: transaction id
           required: true
           schema:
-            $ref: "#/definitions/TransactionsId"
+            $ref: '#/definitions/TransactionsId'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: OK
           schema:
-            $ref: "#/definitions/TransactionIdResponse"
-
-        "400":
+            $ref: '#/definitions/TransactionIdResponse'
+      
+        '400':
           description: Bad request
-        "401":
-          description: Unauthenticated
-        "403":
-          description: Unauthorized
-        "404":
-          description: Not found
+        '401':
+           description: Unauthenticated
+        '403':
+           description: Unauthorized
+        '404':
+           description: Not found
 
-        "500":
+        '500':
           description: Internal Server Error
 
     put:
+      security:
+        - Bearer: []
       tags:
         - Transaction Module
-      summary: Transaction API
-      description: API for updating a transaction
+      summary: Update Transaction 
+      description: Changes transaction details 
       parameters:
         - in: header
-          type: string
+          type:  string
           name: Authorization
-          description: '"Bearer [JWT]'
+          description: "\"Bearer [JWT]"
           required: true
 
         - in: body
           name: Body of the request
-          description: Changes the notes and/or the category of the transaction
+          description: Changes the notes and/or the category of the transaction 
           required: true
           schema:
-            $ref: "#/definitions/TransactionsPut"
+            $ref: '#/definitions/TransactionsPut'
       produces:
         - application/json
       responses:
-        "200":
+        '200':
           description: OK
           schema:
-            $ref: "#/definitions/TransactionsOtherResponse"
-
-        "400":
+            $ref: '#/definitions/TransactionsOtherResponse'
+      
+        '400':
           description: Bad request
-        "401":
-          description: Unauthenticated
-        "403":
-          description: Unauthorized
-        "404":
-          description: Not found
+        '401':
+           description: Unauthenticated
+        '403':
+           description: Unauthorized
+        '404':
+           description: Not found
 
-        "500":
+        '500':
           description: Internal Server Error
 
 definitions:
+
   # All transactions request payload
   Transactions:
     properties:
       userAccountId:
         type: string
         description: ID of the account
-
+        
   # Transaction details by id
   TransactionId:
-    properties:
-      userAccountId:
-        type: string
-        description: ID of the account
-      transactionId:
-        type: string
-        description: ID of the account
-
-    # retrieve transactions Api without Notes & Category
+      properties:
+        userAccountId:
+          type: string
+          description: ID of the account
+        transactionId:
+          type: string
+          description: ID of the account
+        
+   # retrieve transactions Api without Notes & Category
   TransactionIdResponse:
-    type: object
-    properties:
-      transactionId:
-        type: string
-        description: ID of a transaction
-      date:
-        type: string
-        description: Date of the transaction
-      description:
-        type: string
-        description: Description of the transaction
-      amount:
-        type: string
-        description: Amount spent in the transaction
-      balance:
-        type: string
-        description: Account's balance after the transaction
-      category:
-        type: string
-        description: Category of the transaction
-      notes:
-        type: string
-        description: User notes of the transaction
-
-  # Message succes delete transacation by transactionid && userAccountId
-  TransactionsMessageSuccess:
-    properties:
-      message:
-        type: string
-        description: Message of success
-
-  TransactionsResponse:
-    type: array
-    items:
       type: object
       properties:
-        transactionId:
+        Id:
           type: string
           description: ID of a transaction
         date:
@@ -300,20 +264,74 @@ definitions:
         balance:
           type: string
           description: Account's balance after the transaction
+        type:
+          type: string
+          description: transaction type 
+        category:
+          type: string
+          description: Category of the transaction
+        notes:
+          type: string
+          description: User notes of the transaction
 
-  # Transaction Modify
+            
+  # Message succes delete transacation by transactionid && userAccountId 
+  TransactionsMessageSuccess:
+      properties:
+          message:
+            type: string
+            description: Message of success
+            
+            
+  TransactionsResponse:
+      type: object
+      properties:
+        account:
+          type: object
+          properties:
+            id:
+              type: string
+        transactions:
+          type: array
+          items:
+              $ref: '#/definitions/Transaction'     
+          
+     
+# Transaction Modify
   TransactionsPut:
-    properties:
-      notes:
-        type: string
-        description: Notes of the transaction
-      category:
-        type: string
-        description: Category of the transaction
+      properties:
+        notes:
+          type: string
+          description: Notes of the transaction
+        category:
+          type: string
+          description: Category of the transaction
 
-  # Response success Crud transaction Notes & category
+# Response success Crud transaction Notes & category
   TransactionsOtherResponse:
+      properties:
+          status: 
+            type: integer
+            description: 0
+          message:
+            type: string
+            description: Message of success
+  
+  Transaction:
     properties:
-      message:
+      id:
         type: string
-        description: Message of success
+        description: transaction details
+      date:
+        type: string
+        description: date transaction
+      description:
+        type: string
+        description: Description of the transaction
+      amount:
+        type: string
+        description: transaction amount
+      balance:
+        type: string
+        description: transaction balance
+        
